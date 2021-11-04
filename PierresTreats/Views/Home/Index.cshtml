@@ -1,1 +1,9 @@
-<p>@Html.ActionLink("Create an account", "Index", "Account")</p>
+@{
+  Layout = "_Layout";
+}
+
+<h1>Welcome to the Pierres Sweet & Savory Treats</h1>
+<p>Select the links below to determine if you would like to view a treat or all the types of flavors we offer</p>
+<p>@Html.ActionLink("Check out treats", "Index", "Treats")</p> 
+<p>@Html.ActionLink("Find flavors offered", "Index", "Flavors")</p>
+<p>@Html.ActionLink("Sign Up", "Index", "Account")</p>
