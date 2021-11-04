@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PierresTreats.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace PierresTreats
 {
@@ -13,8 +14,8 @@ namespace PierresTreats
     public Startup(IWebHostEnvironment env)
     {
       var builder = new ConfigurationBuilder()
-          .SetBasePath(env.ContentRootPath)
-          .AddJsonFile("appsettings.json");
+        .SetBasePath(env.ContentRootPath)
+        .AddJsonFile("appsettings.json");
       Configuration = builder.Build();
     }
 
@@ -27,12 +28,31 @@ namespace PierresTreats
       services.AddEntityFrameworkMySql()
         .AddDbContext<PierresTreatsContext>(options => options
         .UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
+        
+      services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<PierresTreatsContext>()
+        .AddDefaultTokenProviders();
+
+      services.Configure<IdentityOptions>(options =>
+      {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 0;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredUniqueChars = 0;
+      });
     }
 
     public void Configure(IApplicationBuilder app)
     {
       app.UseDeveloperExceptionPage();
+
+      app.UseAuthentication(); 
+
       app.UseRouting();
+
+      app.UseAuthorization();
 
       app.UseEndpoints(routes =>
       {
@@ -43,7 +63,7 @@ namespace PierresTreats
       
       app.Run(async (context) =>
       {
-        await context.Response.WriteAsync("Page not found!");
+        await context.Response.WriteAsync("PAGE NOT FOUND!");
       });
     }
   }
