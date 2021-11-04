@@ -3,15 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using PierresTreats.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace PierresTreats.Controllers
 {
   public class FlavorsController : Controller
   {
     private readonly PierresTreatsContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public FlavorsController(PierresTreatsContext db)
+    public FlavorsController(UserManager<ApplicationUser> userManager, PierresTreatsContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
 
