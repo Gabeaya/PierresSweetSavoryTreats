@@ -35,11 +35,19 @@ namespace PierresTreats.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(Flavor flavor)
+    public async Task<ActionResult> Create(Flavor flavor, int TreatId)
     {
-      _db.Flavors.Add(flavor);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
+        var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        flavor.User = currentUser;
+        _db.Flavors.Add(flavor);
+        _db.SaveChanges();
+        if (TreatId != 0)
+        {
+            _db.FlavorTreat.Add(new FlavorTreat() { TreatId = TreatId, FlavorId = flavor.FlavorId });
+        }
+        _db.SaveChanges();
+        return RedirectToAction("Index");
     }
 
     public ActionResult Details(int id)
