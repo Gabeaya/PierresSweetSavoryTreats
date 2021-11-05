@@ -9,6 +9,13 @@
 
 @if (Model.Any())
 {
+  @using (Html.BeginForm())
+  {
+    <p>
+        Find by name: @Html.TextBox("SearchString")  
+        <input type="submit" value="Search" />
+    </p>
+  }
   <ul>
     @foreach (Flavor flavor in Model)
     {
