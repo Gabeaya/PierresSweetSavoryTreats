@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using PierresTreats.Models;
@@ -14,13 +15,12 @@ namespace PierresTreats.Controllers
   {
     private readonly PierresTreatsContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
-
     public FlavorsController(UserManager<ApplicationUser> userManager, PierresTreatsContext db)
     {
       _userManager = userManager;
       _db = db;
     }
-
+    [AllowAnonymous]
     public async Task<ActionResult> Index()
     {
         var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -28,12 +28,12 @@ namespace PierresTreats.Controllers
         var userFlavors = _db.Flavors.Where(entry => entry.User.Id == currentUser.Id).ToList();
         return View(userFlavors);
     }
-
+    [Authorize]
     public ActionResult Create()
     {
       return View();
     }
-
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create(Flavor flavor, int TreatId)
     {
@@ -49,7 +49,7 @@ namespace PierresTreats.Controllers
         _db.SaveChanges();
         return RedirectToAction("Index");
     }
-
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
       var thisFlavor = _db.Flavors
@@ -58,12 +58,13 @@ namespace PierresTreats.Controllers
           .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
+    [Authorize]
     public ActionResult Edit(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
-
+    [Authorize]
     [HttpPost]
     public ActionResult Edit(Flavor flavor)
     {
@@ -71,13 +72,13 @@ namespace PierresTreats.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
+    [Authorize]
     public ActionResult Delete(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
-
+    [Authorize]
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
