@@ -37,7 +37,7 @@ _A web application using C# that allows the authorized, signed in, users to view
 }_
 * _IMPORTANT NOTE: Do not iclude the brackets when entering your username or password._
 
-* _Run: dotnet ef database update.
+* _Run: dotnet ef database update._
 
 * _Run: dotnet run in order to use the application in the browser._
 
